@@ -1,30 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import {AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import { Link } from "react-router-dom";
 
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-};
+import styles from './styles';
 
 class MenuAppBar extends React.Component {
   state = {
@@ -39,15 +21,23 @@ class MenuAppBar extends React.Component {
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
-
+  
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
 
+  handleMainMenu = event => {
+    this.setState({ anchorEl2: event.currentTarget });
+  };
+  handleMainMenuClose = () => {
+    this.setState({ anchorEl2: null });
+  };
+
   render() {
     const { classes } = this.props;
-    const { auth, anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { auth, anchorEl, anchorEl2 } = this.state;
+    const openUserMenu = Boolean(anchorEl);
+    const openMainMenu = Boolean(anchorEl2);
 
     return (
       <div className={classes.root}>
@@ -61,16 +51,28 @@ class MenuAppBar extends React.Component {
         </FormGroup>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+
+            <IconButton 
+              className={classes.menuButton} 
+              color="inherit" 
+              aria-label="Menu" 
+              aria-owns={openUserMenu ? 'render-props-menu' : undefined} 
+              onClick={this.handleMainMenu}>
               <MenuIcon />
             </IconButton>
+            <Menu id="render-props-menu" anchorEl={anchorEl2} open={openMainMenu} onClose={this.handleMainMenuClose}>
+              <MenuItem onClick={this.handleMainMenuClose}>New Product</MenuItem>
+              <MenuItem onClick={this.handleMainMenuClose}>All products</MenuItem>
+              <MenuItem onClick={this.handleMainMenuClose}>Exit</MenuItem>
+            </Menu>
+
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Store
             </Typography>
             {auth && (
               <div>
                 <IconButton
-                  aria-owns={open ? 'menu-appbar' : undefined}
+                  aria-owns={openUserMenu ? 'menu-appbar' : undefined}
                   aria-haspopup="true"
                   onClick={this.handleMenu}
                   color="inherit"
@@ -88,7 +90,7 @@ class MenuAppBar extends React.Component {
                     vertical: 'top',
                     horizontal: 'right',
                   }}
-                  open={open}
+                  open={openUserMenu}
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>

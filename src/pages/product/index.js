@@ -5,9 +5,9 @@ export default () => (
     <div>
         <Typography variant="display1">save product</Typography>
 
-        <form onSubmit={this.handleSubmit}>
+        <form>
             <label>
-            Name: <input type="text" ref={(input) => this.input = input} />
+            Name: <input type="text" />
             </label>
 
             <input type="submit" value="Submit" />
