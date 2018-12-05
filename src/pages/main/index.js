@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
 import api from '../../services/api';
+import { Link } from "react-router-dom";
 
 export default class Main extends Component {
 
@@ -36,9 +37,9 @@ export default class Main extends Component {
                     {this.state.products.map(product => (
                         
                         <article key={product._id}>                        
-                            <strong>{product.title}</strong>
-                            <p>TODO Incluir descrição</p>
-                            <a href="/product">Open</a>
+                            <strong>{product.title}</strong> - <span>R$ {product.price}</span>
+                            <p>{product.slug}</p>
+                            <Link to="/product">Open</Link>
                         </article>    
 
                     ))}

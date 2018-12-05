@@ -4,7 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import {AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch as SwitchDOM } from "react-router-dom";
+
+import Main from '../../pages/main';
+import Product from '../../pages/product';
 
 import styles from './styles';
 
@@ -60,10 +63,24 @@ class MenuAppBar extends React.Component {
               onClick={this.handleMainMenu}>
               <MenuIcon />
             </IconButton>
+              
             <Menu id="render-props-menu" anchorEl={anchorEl2} open={openMainMenu} onClose={this.handleMainMenuClose}>
-              <MenuItem onClick={this.handleMainMenuClose}>New Product</MenuItem>
-              <MenuItem onClick={this.handleMainMenuClose}>All products</MenuItem>
-              <MenuItem onClick={this.handleMainMenuClose}>Exit</MenuItem>
+              <Router>
+                <SwitchDOM>
+
+                  <Link to="/product">
+                    <MenuItem onClick={this.handleMainMenuClose}>Product</MenuItem>
+                  </Link>
+                  <Link to="/">
+                    <MenuItem onClick={this.handleMainMenuClose}>Home</MenuItem>
+                  </Link>
+                  
+                
+                </SwitchDOM>
+              </Router>
+
+              
+              
             </Menu>
 
             <Typography variant="h6" color="inherit" className={classes.grow}>
