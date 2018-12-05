@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import {CssBaseline, withStyles} from '@material-ui/core';
 
+import "./App.css"
+
 import AppHeader from './components/Header';
 import AppFooter from './components/Footer';
 
