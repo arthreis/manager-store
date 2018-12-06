@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch} from '@material-ui/core';
+import {AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch as SwitchUI} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { BrowserRouter as Router, Route, Link, Switch as SwitchDOM } from "react-router-dom";
-
-import Main from '../../pages/main';
-import Product from '../../pages/product';
+import { BrowserRouter, Link, Switch } from "react-router-dom";
 
 import styles from './styles';
 
@@ -47,7 +44,7 @@ class MenuAppBar extends React.Component {
         <FormGroup>
           <FormControlLabel
             control={
-              <Switch checked={auth} onChange={this.handleChange} aria-label="LoginSwitch" />
+              <SwitchUI checked={auth} onChange={this.handleChange} aria-label="LoginSwitch" />
             }
             label={auth ? 'Logout' : 'Login'}
           />
@@ -65,22 +62,19 @@ class MenuAppBar extends React.Component {
             </IconButton>
               
             <Menu id="render-props-menu" anchorEl={anchorEl2} open={openMainMenu} onClose={this.handleMainMenuClose}>
-              <Router>
-                <SwitchDOM>
+              <BrowserRouter>
+                <Switch>
+                  <div>
+                    
+                      <MenuItem component={Link} to="/" onClick={this.handleMainMenuClose}>Home</MenuItem>
 
-                  <Link to="/product">
-                    <MenuItem onClick={this.handleMainMenuClose}>Product</MenuItem>
-                  </Link>
-                  <Link to="/">
-                    <MenuItem onClick={this.handleMainMenuClose}>Home</MenuItem>
-                  </Link>
-                  
+                      <MenuItem component={Link} to="/product" onClick={this.handleMainMenuClose}>Product</MenuItem>
+
+                      <MenuItem component={Link} to="/product/new" onClick={this.handleMainMenuClose}>New product</MenuItem>
                 
-                </SwitchDOM>
-              </Router>
-
-              
-              
+                  </div>
+                </Switch>
+              </BrowserRouter>
             </Menu>
 
             <Typography variant="h6" color="inherit" className={classes.grow}>
