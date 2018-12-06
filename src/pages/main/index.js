@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Typography } from '@material-ui/core';
 import api from '../../services/api';
 import { Link } from "react-router-dom";
 
@@ -32,7 +31,7 @@ export default class Main extends Component {
     render(){
         return (
             <div>
-                <Typography variant="display1">Products length: {this.state.products.length}</Typography>
+                <h2>Products length: {this.state.products.length}</h2>
                 <div className="product-list">
                     {this.state.products.map(product => (
                         
