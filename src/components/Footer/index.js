@@ -64,10 +64,7 @@ class Footer extends React.Component {
       <Toolbar className={classes.toolbar}>
         <IconButton color="inherit" aria-label="Open drawer">
           <MenuIcon />
-        </IconButton>
-        <Fab color="secondary" aria-label="Add" className={classes.fabButton}>
-          <AddIcon />
-        </Fab>
+        </IconButton>        
         <div>
           <IconButton color="inherit">
             <SearchIcon />
