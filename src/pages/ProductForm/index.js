@@ -26,6 +26,8 @@ class ProductForm extends React.Component {
     constructor(props) {
         super(props);        
     
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         
         this.state = {
             newProduct: {
@@ -37,26 +39,18 @@ class ProductForm extends React.Component {
                 tags : []
             }
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        
     }
 
-handleChange = name => event => {
-    this.setState({
-        newProduct:{
-            ...this.state.newProduct,
-            [name]: event.target.value,
-        }
-    });
-};
+handleChange = event => {
+    let value = event.target.value ? event.target.value : event.target.checked;
+    console.log(event.target.name);
+    console.log(value);
 
-handleChangeName = name => e => {
-    console.log(e);
     this.setState({
         newProduct:{
             ...this.state.newProduct,
-            name: e.target.value,
+            [event.target.name]: value,
         }
     });
 };
@@ -77,58 +71,57 @@ handleSubmit(e){
 
   render() {
     const { classes } = this.props;
-    const { active } = this.setState;
 
     return (
-        <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+        <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
             <Grid container spacing={24}>
                 <Grid item xs={12}>
                     <TextField
+                        name="name"
                         value={this.state.newProduct.name}
                         required  
                         id="outlined-required"
                         label="Name"
-                        defaultValue="Product name"
                         className={classes.textField}
                         margin="normal"
                         variant="outlined"
                         fullWidth
-                        handleChange={this.handleChangeName}
-                    />
+                        />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        name="description"
                         value={this.state.newProduct.description}
                         required
                         id="outlined-multiline-static"
                         label="Description"
                         multiline
                         rows="4"
-                        defaultValue="Default Value"
                         className={classes.textField}
                         margin="normal"
                         variant="outlined"
                         fullWidth
-                    />
+                        />
                 </Grid>
 
                 <Grid item xs={4}>
                     <TextField
+                        name="slug"
                         value={this.state.newProduct.slug}
                         id="outlined-dense"
                         label="Slug"
                         className={classNames(classes.textField, classes.dense)}
                         margin="normal"
                         variant="outlined"
-                    />
+                        />
                 </Grid>
 
                 <Grid item xs={4}>
                     <TextField
+                        name="price"
                         value={this.state.newProduct.price}
                         id="outlined-number"
                         label="Price"
-                        
                         type="number"
                         className={classNames(classes.textField, classes.dense)}
                         InputLabelProps={{
@@ -136,11 +129,12 @@ handleSubmit(e){
                         }}
                         margin="normal"
                         variant="outlined"
-                    />
+                        />
                 </Grid>
 
                 <Grid item xs={4}>
                     <TextField
+                        name="tags"
                         value={this.state.newProduct.tags}
                         id="outlined-search"
                         label="Tags"
@@ -153,8 +147,9 @@ handleSubmit(e){
 
                 <Grid item xs={12}>
                     <FormControlLabel
-                        control={ <Switch checked={this.state.newProduct.active} onChange={this.handleChangeStatus} aria-label="StatusSwitch" /> }
-                        label={active ? 'Active' : 'Inactive'}
+                        name="active"
+                        control={ <Switch checked={this.state.newProduct.active} aria-label="StatusSwitch" /> }
+                        label={this.state.newProduct.active ? 'Active' : 'Inactive'}
                     />
                 </Grid>
 
