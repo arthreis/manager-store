@@ -43,9 +43,7 @@ class ProductForm extends React.Component {
     }
 
 handleChange = event => {
-    let value = event.target.value ? event.target.value : event.target.checked;
-    console.log(event.target.name);
-    console.log(value);
+    let value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
 
     this.setState({
         newProduct:{
@@ -54,15 +52,6 @@ handleChange = event => {
         }
     });
 };
-
-handleChangeStatus = event => {
-    this.setState({
-        newProduct:{
-            ...this.state.newProduct,
-            active: event.target.checked
-        }
-    });
-}
 
 handleSubmit(e){
     console.log("Form submited!");
