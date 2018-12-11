@@ -15,7 +15,7 @@ export default class Main extends Component {
     }
 
     //arrow function nao sobreescreve o valor do this
-    loadProducts = async () => {
+    loadProducts = async () => {        
         const response = await api.get('/products');
         console.log(response.data);
         this.setState({products: response.data})
