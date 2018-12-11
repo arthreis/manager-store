@@ -68,15 +68,19 @@ handleSubmit(e){
         }
     });
 
-    this.saveProduct();    
+    this.saveProduct().then(function(res){
+        console.log(res);
+    }).catch(function (error) {
+        console.warn(error.response.status + " : " + error.response.data[0].message);
+    });
 }
 
 saveProduct = async () => {
+    console.log("saving product...");
     console.log(this.state.newProduct);
-
-    let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTMxNDUxNjM2LCJleHAiOjE1MzE1MzgwMzZ9.uJFIgn-F6QCzhqcLls5FiMPk43E_n2JPD7XHtbUfTQU", } };
+    let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTQ0NTM4NDc4LCJleHAiOjE1NDQ2MjQ4Nzh9.MIKioyTRKUaqoJzvAzlzitF671OfWV4ApLMHKWgys4U", } };
     const response = await api.post('/products', this.state.newProduct, axiosConfig);
-    console.log(response.data);
+    return response;
 }
 
   render() {
