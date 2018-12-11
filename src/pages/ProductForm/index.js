@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import {TextField, withStyles, Switch, FormControlLabel, Grid, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Add';
 
+import api from '../../services/api';
+
 const styles = theme => ({
     container: {
         display: 'flex',
@@ -56,6 +58,25 @@ handleChange = event => {
 handleSubmit(e){
     console.log("Form submited!");
     e.preventDefault();
+
+    let tagsA = [];
+    tagsA.push(this.state.newProduct.tags);
+    this.setState({
+        newProduct:{
+            ...this.state.newProduct,
+            tags: tagsA,
+        }
+    });
+
+    this.saveProduct();    
+}
+
+saveProduct = async () => {
+    console.log(this.state.newProduct);
+
+    let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTMxNDUxNjM2LCJleHAiOjE1MzE1MzgwMzZ9.uJFIgn-F6QCzhqcLls5FiMPk43E_n2JPD7XHtbUfTQU", } };
+    const response = await api.post('/products', this.state.newProduct, axiosConfig);
+    console.log(response.data);
 }
 
   render() {
@@ -144,7 +165,7 @@ handleSubmit(e){
 
                 <Grid container direction="column" justify="flex-end" alignItems="flex-end" style={{ padding: 20 }}>
                     
-                    <Button variant="contained" color="secondary" size="large" className={classes.button}>
+                    <Button type="submit" variant="contained" color="secondary" size="large" className={classes.button}>
                         <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
                             Save
                     </Button>
