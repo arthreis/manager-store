@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react';
 import {CssBaseline, withStyles} from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+import "./App.css"
 
 import AppHeader from './components/Header';
 import AppFooter from './components/Footer';
@@ -15,15 +18,24 @@ const styles = theme => ({
   },
 });
 
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: "#eee" },
+    secondary: { main: '#fff' },
+  },
+});
+
 const App = ({ classes }) => (
-  <Fragment>
-    <CssBaseline />
-    <AppHeader />
-    <main className={classes.main}>
-      <Routes/>
-    </main>
-    <AppFooter />
-  </Fragment>
+  <MuiThemeProvider theme={theme}>
+    <Fragment>
+      <CssBaseline />
+      <AppHeader />
+      <main className={classes.main}>
+        <Routes/>
+      </main>
+      <AppFooter />
+    </Fragment>
+  </MuiThemeProvider>
 );
 
 export default withStyles(styles)(App);
