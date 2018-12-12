@@ -16,10 +16,10 @@ const styles = theme => ({
         marginRight: theme.spacing.unit,
     },
     dense: {
-        marginTop: 16,
+        marginTop: 0,
     },
     menu: {
-        width: 200,
+        width: 0,
     },
 });
 
@@ -117,10 +117,9 @@ class ProductForm extends React.Component {
             <Popover
                 id="simple-popper"
                 open={open}
-                anchorEl={this.state.anchorEl}   
                 onClose={this.handleClosePopover}       
                 anchorOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'center',
                     horizontal: 'center',
                 }}
                 transformOrigin={{
@@ -162,7 +161,7 @@ class ProductForm extends React.Component {
                             />
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         <TextField
                             name="slug"
                             value={this.state.newProduct.slug}
@@ -174,7 +173,7 @@ class ProductForm extends React.Component {
                             />
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                         <TextField
                             name="price"
                             value={this.state.newProduct.price}
@@ -190,7 +189,7 @@ class ProductForm extends React.Component {
                             />
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={12}>
                         <TextField
                             name="tags"
                             value={this.state.newProduct.tags}
@@ -200,6 +199,7 @@ class ProductForm extends React.Component {
                             className={classes.textField}
                             margin="normal"
                             variant="outlined"
+                            fullWidth
                         />
                     </Grid>
 

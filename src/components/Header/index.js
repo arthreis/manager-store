@@ -62,8 +62,8 @@ class MenuAppBar extends React.Component {
                 <Menu id="render-props-menu" anchorEl={anchorEl2} open={openMainMenu} onClose={this.handleMainMenuClose}>
                         
                     <MenuItem component={Link} to="/" onClick={this.handleMainMenuClose}>Home</MenuItem>
-                    <MenuItem component={Link} to="/product" onClick={this.handleMainMenuClose}>Product</MenuItem>
                     <MenuItem component={Link} to="/product/new" onClick={this.handleMainMenuClose}>New product</MenuItem>
+                    <MenuItem component={Link} to="/products" onClick={this.handleMainMenuClose}>Products</MenuItem>
                         
                 </Menu>
 
