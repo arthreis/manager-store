@@ -51,7 +51,6 @@ class ProductForm extends React.Component {
 
     handleChange = event => {
         let value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.setState({popUp: {opened: true, message: "error.response.data[0].message"}});
         this.setState({
             newProduct:{
                 ...this.state.newProduct,
@@ -60,7 +59,7 @@ class ProductForm extends React.Component {
         });
     };
 
-    handleSubmit(e){
+    handleSubmit = e => {
         console.log("Form submited!");
         e.preventDefault();
 
@@ -76,17 +75,28 @@ class ProductForm extends React.Component {
         this.saveProduct().then(function(res){
             console.log(res);
         }).catch((error) => {
-            console.warn(error.response.status + " : " + error.response.data[0].message);            
-            this.setState({popUp: {opened: true, message: error.response.data[0].message}});
+            switch (error.response.status) {
+                case 401:
+                    console.warn(error.response.data.message);
+                    break;
+                case 400:
+                    console.warn(error.response.data.message);
+                    break;
+                default:
+                    console.warn(error.response.data.message);
+                    break;
+            }
+            this.handleShowPopover(error.response.data.message);
         });
     }
 
-    handleClose = () => {
+    handleClosePopover = () => {
+        this.setState({popUp: {opened: false, message: null}});
     };
-    
-    handleRequestClose = () => {
-        this.setState({popUp: {opened: false, message: "error.response.data[0].message"}});
-      };
+
+    handleShowPopover = (message) => {
+        this.setState({popUp: {opened: true, message: message}});
+    };
 
     saveProduct = async () => {
         console.log("saving product...");
@@ -108,7 +118,7 @@ class ProductForm extends React.Component {
                 id="simple-popper"
                 open={open}
                 anchorEl={this.state.anchorEl}   
-                onClose={this.handleRequestClose}       
+                onClose={this.handleClosePopover}       
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'center',
