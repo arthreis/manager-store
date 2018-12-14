@@ -34,7 +34,7 @@ class ProductForm extends React.Component {
         this.state = {
             tokenid: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTQ0NTM4NDc4LCJleHAiOjE1NDQ2MjQ4Nzh9.MIKioyTRKUaqoJzvAzlzitF671OfWV4ApLMHKWgys4U",
             newProduct: {
-                name : "",
+                title : "",
                 slug : "",
                 description : "",
                 price : "",
@@ -134,11 +134,11 @@ class ProductForm extends React.Component {
                 <Grid container spacing={24}>
                     <Grid item xs={12}>
                         <TextField
-                            name="name"
-                            value={this.state.newProduct.name}
+                            name="title"
+                            value={this.state.newProduct.title}
                             required  
                             id="outlined-required"
-                            label="Name"
+                            label="Title"
                             className={classes.textField}
                             margin="normal"
                             variant="outlined"

@@ -29,6 +29,7 @@ class MenuAppBar extends React.Component {
     handleMainMenu = event => {
         this.setState({ anchorEl2: event.currentTarget });
     };
+    
     handleMainMenuClose = () => {
         this.setState({ anchorEl2: null });
     };
@@ -63,7 +64,7 @@ class MenuAppBar extends React.Component {
                         
                     <MenuItem component={Link} to="/" onClick={this.handleMainMenuClose}>Home</MenuItem>
                     <MenuItem component={Link} to="/product/new" onClick={this.handleMainMenuClose}>New product</MenuItem>
-                    <MenuItem component={Link} to="/products" onClick={this.handleMainMenuClose}>Products</MenuItem>
+                    <MenuItem component={Link} to="/products" onClick={this.handleMainMenuClose}>Products</MenuItem>                    
                         
                 </Menu>
 
@@ -73,15 +74,17 @@ class MenuAppBar extends React.Component {
                 {auth && (
                 <div>
                     <IconButton
-                        aria-owns={openUserMenu ? 'menu-appbar' : undefined}
+                        aria-owns={openUserMenu ? 'menu-appbar-login' : undefined}
                         aria-haspopup="true"
                         onClick={this.handleMenu}
                         color="inherit"
                     >
                         <AccountCircle />
                     </IconButton>
+
+                    
                     <Menu
-                        id="menu-appbar"
+                        id="menu-appbar-login"
                         anchorEl={anchorEl}
                         anchorOrigin={{
                             vertical: 'top',
@@ -94,6 +97,7 @@ class MenuAppBar extends React.Component {
                         open={openUserMenu}
                         onClose={this.handleClose}
                     >
+                        <MenuItem component={Link} to="/login" onClick={this.handleClose}>Login</MenuItem>
                         <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                         <MenuItem onClick={this.handleClose}>My account</MenuItem>
                     </Menu>
