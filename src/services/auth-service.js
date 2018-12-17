@@ -1,39 +1,54 @@
 import axios from 'axios';
+import api from './api';
 
 axios.interceptors.response.use((response) => {
   return response;
 }, (error) => {
-  if (error.status == 401) {
-    Auth.logout();
+  if (error.status === 401) {
+    console.log("Erro status 401, fazendo logout...");
+    this.logout();
   }
 });
 
-export const Auth = {
-  authenticated() {
+export function authenticated() {
     return !!localStorage.getItem('mstore-tokenid');
-  },
-  login({email, password}) {
-    return axios.post(`http://localhost:8081/login`, {email, password})
+}
+
+export function  login({email, password}) {
+    return api.post(`/customers/authenticate`, {email, password})
       .then((res) => {
-        let {token, user} = res.data;
-        localStorage.setItem('profile', JSON.stringify(user));
-        localStorage.setItem('token', token);
+        let {token, data} = res.data;
+        localStorage.setItem('profile', JSON.stringify(data));
+        localStorage.setItem('mstore-tokenid', token);
         axios.interceptors.request.use((config) => {
           config.headers['authorization'] = `Bearer ${token}`;
           return config;
         });
-      });
-  },
-  logout() {
+    });
+  }
+  export function  logout() {
     localStorage.removeItem('profile');
-    localStorage.removeItem('token');
+    localStorage.removeItem('mstore-tokenid');
     axios.interceptors.request.use((config) => {
       delete config.headers['authorization'];
       return config;
     });
-    window.location = '/#/login';
+    //window.location = '/#/login';
+}
+
+export function  validarToken() {
+    console.log("Validando token...");    
+    const token = localStorage.getItem('mstore-tokenid');
+    return api.post(`/customers/refresh-token`, token)
+    .then((res) => {
+        console.info(res);    
+        return res.data;
+    }).catch((error) => {
+        console.warn(error.response.data);
+        return undefined;
+        //window.location = '/login';
+    });
   }
-};
 /*import api from './api';
 
 class authService {

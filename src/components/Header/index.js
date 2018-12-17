@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 
 import styles from './styles';
 
+import { validarToken } from './../../services/auth-service';
+
 class MenuAppBar extends React.Component {
     
     state = {
@@ -19,12 +21,15 @@ class MenuAppBar extends React.Component {
         this.validarLogin();        
     }
 
-    validarLogin = () => {
+    validarLogin = async () => {
         const token = localStorage.getItem("mstore-tokenid");
         console.log(token);
         
-        //const data = authService.validarToken(token);
-        //console.log(data);
+        const data = await validarToken(token);
+        if(!data){
+            console.log("Redirect");
+            
+        }
     }
 
     handleChange = event => {
