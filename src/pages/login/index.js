@@ -43,6 +43,7 @@ class Login extends Component {
             localStorage.setItem("mstore-tokenid", token);
             console.log(response);
             //TODO redirecionar para pagina principal
+            this.handleShowPopover(response.data.data);
         }).catch(error => {
             console.log(error.response.data);
             this.handleShowPopover(error.response.data.message);

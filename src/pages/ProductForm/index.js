@@ -32,7 +32,7 @@ class ProductForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         
         this.state = {
-            tokenid: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTQ0NTM4NDc4LCJleHAiOjE1NDQ2MjQ4Nzh9.MIKioyTRKUaqoJzvAzlzitF671OfWV4ApLMHKWgys4U",
+            tokenid: "",
             newProduct: {
                 title : "",
                 slug : "",
@@ -47,6 +47,11 @@ class ProductForm extends React.Component {
             },
         };
         
+    }
+
+    componentDidMount(){
+        const token = localStorage.getItem("mstore-tokenid");
+        this.setState( { tokenid: token } );
     }
 
     handleChange = event => {
@@ -99,8 +104,7 @@ class ProductForm extends React.Component {
     };
 
     saveProduct = async () => {
-        console.log("saving product...");
-        console.log(this.state.newProduct);
+        console.log("saving product...");        
         let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": this.state.tokenid, } };
         const response = await api.post('/products', this.state.newProduct, axiosConfig);
         return response;

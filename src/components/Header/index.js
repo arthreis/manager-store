@@ -9,10 +9,23 @@ import { Link } from "react-router-dom";
 import styles from './styles';
 
 class MenuAppBar extends React.Component {
+    
     state = {
-        auth: true,
+        auth: false,
         anchorEl: null,
     };
+    
+    componentDidMount() {
+        this.validarLogin();        
+    }
+
+    validarLogin = () => {
+        const token = localStorage.getItem("mstore-tokenid");
+        console.log(token);
+        
+        //const data = authService.validarToken(token);
+        //console.log(data);
+    }
 
     handleChange = event => {
         this.setState({ auth: event.target.checked });
@@ -98,8 +111,8 @@ class MenuAppBar extends React.Component {
                         onClose={this.handleClose}
                     >
                         <MenuItem component={Link} to="/login" onClick={this.handleClose}>Login</MenuItem>
-                        <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                        <MenuItem onClick={this.handleClose}>TODO Profile</MenuItem>
+                        <MenuItem onClick={this.handleClose}>TODO My account</MenuItem>
                     </Menu>
                 </div>
                 )}
