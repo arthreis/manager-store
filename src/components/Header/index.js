@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch as SwitchUI} from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, FormGroup, FormControlLabel, MenuItem, Menu, Switch as SwitchUI } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Link } from "react-router-dom";
@@ -18,17 +18,18 @@ class MenuAppBar extends React.Component {
     };
     
     componentDidMount() {
-        this.validarLogin();        
+        this.validarLogin();
     }
 
     validarLogin = async () => {
         const token = localStorage.getItem("mstore-tokenid");
-        console.log(token);
         
         const data = await validarToken(token);
         if(!data){
-            console.log("Redirect");
-            
+            console.log("Redirect to login page");
+            this.setState(() => ( { auth: false } ));
+        }else{
+            this.setState(() => ( { auth: true } ));
         }
     }
 
@@ -81,8 +82,11 @@ class MenuAppBar extends React.Component {
                 <Menu id="render-props-menu" anchorEl={anchorEl2} open={openMainMenu} onClose={this.handleMainMenuClose}>
                         
                     <MenuItem component={Link} to="/" onClick={this.handleMainMenuClose}>Home</MenuItem>
-                    <MenuItem component={Link} to="/product/new" onClick={this.handleMainMenuClose}>New product</MenuItem>
-                    <MenuItem component={Link} to="/products" onClick={this.handleMainMenuClose}>Products</MenuItem>                    
+                    {auth && (<div>
+                        <MenuItem component={Link} to="/product/new" onClick={this.handleMainMenuClose}>New product</MenuItem>
+                        <MenuItem component={Link} to="/products" onClick={this.handleMainMenuClose}>Products</MenuItem>                    
+                    </div>
+                    )}
                         
                 </Menu>
 

@@ -19,10 +19,13 @@ const styles = theme => ({
 });
 
 const theme = createMuiTheme({
-  palette: {
-    primary: { main: "#eee" },
-    secondary: { main: '#fff' },
-  },
+    palette: {
+        primary: { main: "#eee" },
+        secondary: { main: '#fff' },
+    },
+    typography: {
+        useNextVariants: true,
+    },
 });
 
 const App = ({ classes }) => (

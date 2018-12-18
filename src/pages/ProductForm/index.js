@@ -79,6 +79,8 @@ class ProductForm extends React.Component {
 
         this.saveProduct().then(function(res){
             console.log(res);
+            this.resetForm();
+            this.handleShowPopover(res.data.message);
         }).catch((error) => {
             switch (error.response.status) {
                 case 401:
@@ -108,6 +110,18 @@ class ProductForm extends React.Component {
         let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": this.state.tokenid, } };
         const response = await api.post('/products', this.state.newProduct, axiosConfig);
         return response;
+    }
+
+    resetForm = () => {
+        this.setState({
+            newProduct: {
+                title : "",
+                slug : "",
+                description : "",
+                price : "",
+                active : true,
+                tags : []
+        }})
     }
 
     render() {

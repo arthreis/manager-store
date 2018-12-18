@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, TextField, InputAdornment, IconButton, Button, Typography, Popover } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { Redirect } from 'react-router'
 
 import api from "./../../services/api";
 
@@ -10,7 +11,7 @@ class Login extends Component {
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.signIn = this.signIn.bind(this);
 
         this.state = {
             user: {
@@ -35,21 +36,20 @@ class Login extends Component {
         });
     };
 
-    handleSubmit = async () => {
+    signIn = async () => {
         console.log("logging...");
-
+        
         await api.post("/customers/authenticate", this.state.user).then(response => {
             const { token } = response.data;
+            console.log("logged !");
             localStorage.setItem("mstore-tokenid", token);
-            console.log(response);
-            //TODO redirecionar para pagina principal
-            this.handleShowPopover(response.data.data);
+            console.log("TODO redirecionar para pagina principal");
+            this.setState(() => ( { toMain: true } ));
+            //return response.data.data;
         }).catch(error => {
-            console.log(error.response.data);
+            console.log(error);            
             this.handleShowPopover(error.response.data.message);
         });
-
-        //this.handleShowPopover(error.response.data.message);
     }
 
     handleClickShowPassword = () => {
@@ -65,6 +65,12 @@ class Login extends Component {
     };
     
     render() {
+
+        if (this.state.toMain === true) {
+            console.log("redirecting to main...");
+            //window.location.href='/login';        
+            return (<Redirect to='/' />);
+        }
 
         const { opened } = this.state.popUp;
         const open = Boolean(opened);
@@ -124,7 +130,7 @@ class Login extends Component {
                             }}
                             />
                     </Grid>
-                    <Button variant="contained" color="secondary" size="large" type="button" onClick={this.handleSubmit}>
+                    <Button variant="contained" color="secondary" size="large" type="button" onClick={this.signIn}>
                         Login
                     </Button>
                 </form>

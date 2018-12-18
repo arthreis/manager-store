@@ -37,11 +37,12 @@ export function  login({email, password}) {
 }
 
 export function  validarToken() {
-    console.log("Validando token...");    
+    console.log("Validando token...");
     const token = localStorage.getItem('mstore-tokenid');
-    return api.post(`/customers/refresh-token`, token)
+    return api.post(`/customers/refresh-token`, {token: token})
     .then((res) => {
-        console.info(res);    
+      console.log("Token válido!");
+        console.info(res.data.data);    
         return res.data;
     }).catch((error) => {
         console.warn(error.response.data);
