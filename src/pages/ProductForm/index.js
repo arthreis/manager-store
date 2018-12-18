@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { TextField, withStyles, Switch, FormControlLabel, Grid, Button, Popover, Typography } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Add';
+import NumberFormat from 'react-number-format';
 
 import api from '../../services/api';
 
@@ -15,12 +16,9 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
     },
-    dense: {
-        marginTop: 0,
-    },
     menu: {
         width: 0,
-    },
+    }
 });
 
 class ProductForm extends React.Component {
@@ -64,6 +62,12 @@ class ProductForm extends React.Component {
         });
     };
 
+    handleChange2 = name => event => {
+        this.setState({
+          [name]: event.target.value,
+        });
+      };
+
     handleSubmit = e => {
         console.log("Form submited!");
         e.preventDefault();
@@ -93,7 +97,15 @@ class ProductForm extends React.Component {
                     console.warn(error.response.data.message);
                     break;
             }
-            this.handleShowPopover(error.response.data.message);
+            let message;
+            if(error.response.data.length > 1){
+                error.response.data.forEach(msg => {
+                    message+=msg.message+"</br>";
+                });
+            }else{
+                message = error.response.data.message;
+            }
+            this.handleShowPopover(message);
         });
     }
 
@@ -149,7 +161,7 @@ class ProductForm extends React.Component {
             </Popover>
         
             <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                <Grid container spacing={24}>
+                <Grid container>
                     <Grid item xs={12}>
                         <TextField
                             name="title"
@@ -179,32 +191,37 @@ class ProductForm extends React.Component {
                             />
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={5}>
                         <TextField
                             name="slug"
                             value={this.state.newProduct.slug}
                             id="outlined-dense"
                             label="Slug"
-                            className={classNames(classes.textField, classes.dense)}
+                            className={classNames(classes.textField)}
                             margin="normal"
                             variant="outlined"
+                            fullWidth
                             />
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={2}>
+                    </Grid>
+
+                    <Grid item xs={5}>
+
                         <TextField
                             name="price"
                             value={this.state.newProduct.price}
-                            id="outlined-number"
+                            id="formatted-numberformat-input"
                             label="Price"
-                            type="number"
-                            className={classNames(classes.textField, classes.dense)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
+                            className={classNames(classes.textField)}
                             margin="normal"
                             variant="outlined"
-                            />
+                            InputProps={{
+                                inputComponent: NumberFormatCustom,
+                            }}
+                        />
+                        
                     </Grid>
 
                     <Grid item xs={12}>
@@ -229,7 +246,7 @@ class ProductForm extends React.Component {
                         />
                     </Grid>
 
-                    <Grid container direction="column" justify="flex-end" alignItems="flex-end" style={{ padding: 20 }}>
+                    <Grid container direction="column" justify="flex-end" alignItems="flex-end" >
                         
                         <Button type="submit" variant="contained" color="secondary" size="large" className={classes.button}>
                             <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
@@ -246,6 +263,30 @@ class ProductForm extends React.Component {
 
 ProductForm.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+
+function NumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+        {...other}
+        getInputRef={inputRef}
+        onValueChange={values => {
+            onChange({
+            target: {
+                value: values.value,
+            },
+            });
+        }}
+        prefix="R$"
+        />
+    );
+}
+  
+NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ProductForm);

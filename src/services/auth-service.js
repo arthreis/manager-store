@@ -2,6 +2,10 @@ import axios from 'axios';
 import api from './api';
 
 axios.interceptors.response.use((response) => {
+    console.log("...interceptor...");
+    console.log(response);
+    console.log("...interceptor...");
+    
   return response;
 }, (error) => {
   if (error.status === 401) {
@@ -15,25 +19,33 @@ export function authenticated() {
 }
 
 export function  login({email, password}) {
+    console.log("Fazendo login...");
     return api.post(`/customers/authenticate`, {email, password})
-      .then((res) => {
+    .then((res) => {
+        console.log("Logado!");
         let {token, data} = res.data;
         localStorage.setItem('profile', JSON.stringify(data));
         localStorage.setItem('mstore-tokenid', token);
-        axios.interceptors.request.use((config) => {
-          config.headers['authorization'] = `Bearer ${token}`;
-          return config;
-        });
+        return res;
+        /*api.interceptors.request.use((config) => {
+            config.headers['authorization'] = `Bearer ${token}`;
+            return config;
+        });*/
+    }).catch((error) => {
+        console.log("Falha ao fazer login!");
+        return error.response.data;
     });
   }
-  export function  logout() {
+
+export function  logout() {
+    console.log("Fazendo logout...");
     localStorage.removeItem('profile');
     localStorage.removeItem('mstore-tokenid');
     axios.interceptors.request.use((config) => {
       delete config.headers['authorization'];
       return config;
     });
-    //window.location = '/#/login';
+    window.location = '/login';
 }
 
 export function  validarToken() {
@@ -41,8 +53,7 @@ export function  validarToken() {
     const token = localStorage.getItem('mstore-tokenid');
     return api.post(`/customers/refresh-token`, {token: token})
     .then((res) => {
-      console.log("Token válido!");
-        console.info(res.data.data);    
+        console.log("Token válido!");
         return res.data;
     }).catch((error) => {
         console.warn(error.response.data);

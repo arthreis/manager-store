@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, TextField, InputAdornment, IconButton, Button, Typography, Popover } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
 
-import api from "./../../services/api";
+import { validarToken, login } from './../../services/auth-service';
 
 class Login extends Component {
 
@@ -23,7 +23,21 @@ class Login extends Component {
                 opened: false,
                 message: "",
             },
+            auth: false,
         };
+    }
+
+    componentDidMount() {
+        this.validarSessao();
+    }
+
+    validarSessao = async () => {
+       const data = await validarToken();
+        if(!data) {
+            console.log("Redirect to login page");            
+        } else {
+            this.setState(() => ( { auth: true } ));
+        }
     }
 
     handleChange = event => {
@@ -37,9 +51,16 @@ class Login extends Component {
     };
 
     signIn = async () => {
-        console.log("logging...");
+        const data = await login(this.state.user);
+        if(data.message){
+            console.warn(data.message);
+            this.handleShowPopover(data.message)
+        }else{
+            console.log("TODO redirecionar para pagina principal");
+            this.setState(() => ( { auth: true } ));
+        }
         
-        await api.post("/customers/authenticate", this.state.user).then(response => {
+        /*await api.post("/customers/authenticate", this.state.user).then(response => {
             const { token } = response.data;
             console.log("logged !");
             localStorage.setItem("mstore-tokenid", token);
@@ -49,7 +70,7 @@ class Login extends Component {
         }).catch(error => {
             console.log(error);            
             this.handleShowPopover(error.response.data.message);
-        });
+        });*/
     }
 
     handleClickShowPassword = () => {
@@ -66,9 +87,8 @@ class Login extends Component {
     
     render() {
 
-        if (this.state.toMain === true) {
+        if (this.state.auth) {
             console.log("redirecting to main...");
-            //window.location.href='/login';        
             return (<Redirect to='/' />);
         }
 
