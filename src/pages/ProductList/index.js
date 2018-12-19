@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import api from '../../services/api';
-import { Link } from "react-router-dom";
+import ProductCard from './../../components/ProductCard';
 
 export default class ProductList extends Component {
 
@@ -18,29 +18,22 @@ export default class ProductList extends Component {
     loadProducts = async () => {        
         const response = await api.get('/products');
         console.log(response.data);
-        this.setState({products: response.data})
+        this.setState({products: response.data});
     }
 
     prevPage = () => {
-
+        console.log("TODO prevPage");
     }
     nextPage = () => {
-
+        console.log("TODO nextPage");
     }
 
     render(){
         return (
-            <div>
-                <h2>Products length: {this.state.products.length}</h2>
+            <div>                
                 <div className="product-list">
                     {this.state.products.map(product => (
-                        
-                        <article key={product._id}>                        
-                            <strong>{product.title}</strong> - <span>R$ {product.price}</span>
-                            <p>{product.slug}</p>
-                            <Link to="/product">Open</Link>
-                        </article>    
-
+                        <ProductCard product={product} />
                     ))}
 
                     <div className="actions">

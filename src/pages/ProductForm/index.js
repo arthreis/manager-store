@@ -97,10 +97,10 @@ class ProductForm extends React.Component {
                     console.warn(error.response.data.message);
                     break;
             }
-            let message;
+            let message = "";
             if(error.response.data.length > 1){
                 error.response.data.forEach(msg => {
-                    message+=msg.message+"</br>";
+                    message+=msg.message+"\n";
                 });
             }else{
                 message = error.response.data.message;
@@ -279,7 +279,9 @@ function NumberFormatCustom(props) {
             },
             });
         }}
-        prefix="R$"
+        prefix={"R$"}
+        allowNegative={false}
+        decimalScale={2}
         />
     );
 }
