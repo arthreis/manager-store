@@ -33,7 +33,7 @@ export default class ProductList extends Component {
             <div>                
                 <div className="product-list">
                     {this.state.products.map(product => (
-                        <ProductCard product={product} />
+                        <ProductCard product={product} key={product._id}/>
                     ))}
 
                     <div className="actions">

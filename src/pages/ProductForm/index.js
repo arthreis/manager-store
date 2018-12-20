@@ -11,13 +11,15 @@ const styles = theme => ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
+    },    
     menu: {
         width: 0,
+    },
+    typography: {
+        margin: theme.spacing.unit * 2,
+    },
+    popover: {
+        background: "blue",
     }
 });
 
@@ -109,9 +111,9 @@ class ProductForm extends React.Component {
         });
     }
 
-    handleClosePopover = () => {
+    /*handleClosePopover = () => {
         this.setState({popUp: {opened: false, message: null}});
-    };
+    };*/
 
     handleShowPopover = (message) => {
         this.setState({popUp: {opened: true, message: message}});
@@ -146,6 +148,7 @@ class ProductForm extends React.Component {
         <div>
             <Popover
                 id="simple-popper"
+                className={classes.popover}
                 open={open}
                 onClose={this.handleClosePopover}       
                 anchorOrigin={{
@@ -157,6 +160,8 @@ class ProductForm extends React.Component {
                     horizontal: 'center',
                 }}
             >
+                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
+                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
                 <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
             </Popover>
         
@@ -220,6 +225,7 @@ class ProductForm extends React.Component {
                             InputProps={{
                                 inputComponent: NumberFormatCustom,
                             }}
+                            fullWidth
                         />
                         
                     </Grid>

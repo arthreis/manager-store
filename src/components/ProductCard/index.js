@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 const styles = {
   card: {
     maxWidth: 345,
+    marginBottom: 20
   },
   media: {
       height: 140,
@@ -24,11 +25,11 @@ const ProductCard = ({ product }) => (
         <CardActionArea component={Link} to="/product" params={product}>
             <CardMedia
                 style={styles.media}
-                image="assets/images/store-main.jpg"
-                title="Contemplative Reptile"
+                image={"assets/images/store-main.jpg"}
+                title={product.title}
             />
             <CardContent>
-                <Typography gutterBottom variant="h5" component="h5">
+                <Typography gutterBottom variant="p" component="p">
                     { product.title }
                 </Typography>
                 <Typography component="p">
