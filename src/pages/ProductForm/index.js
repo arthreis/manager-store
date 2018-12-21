@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TextField, withStyles, Switch, FormControlLabel, Grid, Button, Popover, Typography } from '@material-ui/core';
+import { TextField, withStyles, Switch, FormControlLabel, Grid, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Add';
 import NumberFormat from 'react-number-format';
+import PopUp from './../../components/PopUp';
 
 import api from '../../services/api';
 
@@ -17,9 +18,6 @@ const styles = theme => ({
     },
     typography: {
         margin: theme.spacing.unit * 2,
-    },
-    popover: {
-        background: "blue",
     }
 });
 
@@ -141,29 +139,9 @@ class ProductForm extends React.Component {
     render() {
         const { classes } = this.props;
         
-        const { opened } = this.state.popUp;
-        const open = Boolean(opened);
-
     return (
         <div>
-            <Popover
-                id="simple-popper"
-                className={classes.popover}
-                open={open}
-                onClose={this.handleClosePopover}       
-                anchorOrigin={{
-                    vertical: 'center',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
-                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
-                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
-            </Popover>
+            <PopUp popup={this.state.popUp}></PopUp>
         
             <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
                 <Grid container>
