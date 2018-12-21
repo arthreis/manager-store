@@ -86,6 +86,12 @@ class ProductForm extends React.Component {
             this.resetForm();
             this.handleShowPopover(res.data.message);
         }).catch((error) => {
+            
+            if(!error.response){
+                console.error(error);
+                return;
+            }
+
             switch (error.response.status) {
                 case 401:
                     console.warn(error.response.data.message);
@@ -120,7 +126,7 @@ class ProductForm extends React.Component {
     saveProduct = async () => {
         console.log("saving product...");        
         let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": this.state.tokenid, } };
-        const response = await api.post('/products', this.state.newProduct, axiosConfig);
+        const response = await api.post('/product', this.state.newProduct, axiosConfig);
         return response;
     }
 
@@ -141,7 +147,7 @@ class ProductForm extends React.Component {
         
     return (
         <div>
-            <PopUp popup={this.state.popUp}></PopUp>
+            <PopUp {...this.state.popUp}></PopUp>
         
             <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
                 <Grid container>

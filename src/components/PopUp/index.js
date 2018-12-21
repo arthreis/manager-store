@@ -8,7 +8,6 @@ class PopUp extends Component {
     
     constructor(props){
         super(props);
-        debugger;
         console.log(props);
 
         this.state = {

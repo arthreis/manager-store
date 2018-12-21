@@ -56,7 +56,11 @@ export function  validarToken() {
         console.log("Token válido!");
         return res.data;
     }).catch((error) => {
-        console.warn(error);
+        if(error.response) {
+            console.warn(error.response.data);
+        } else {
+            console.warn(error);            
+        }
         return undefined;
         //window.location = '/login';
     });
