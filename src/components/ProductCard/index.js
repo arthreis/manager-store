@@ -22,7 +22,12 @@ const styles = {
 
 const ProductCard = ({ product }) => (
     <Card style={styles.card}>
-        <CardActionArea component={Link} to="/product" params={product}>
+        <CardActionArea component={Link} to={
+            {
+                pathname: `/product/${product._id}`,
+                state: { product: product }
+            }
+            } params={product._id}>
             <CardMedia
                 style={styles.media}
                 image={"assets/images/store-main.jpg"}
