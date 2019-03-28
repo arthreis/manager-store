@@ -10,7 +10,7 @@ const Routes = () => (
     <Switch>
         <Route path="/" component={withRouter(Main)} exact></Route>
         <Route path="/product/new" component={withRouter(NewProduct)}></Route>
-        <Route path="/product" component={withRouter(Product)}></Route>
+        <Route path="/product/:id" component={withRouter(Product)}></Route>
         <Route path="/products" component={withRouter(AllProducts)}></Route>
         <Route path="/login" component={withRouter(Login)}></Route>
     </Switch>

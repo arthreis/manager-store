@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
+import api from '../../services/api';
 
 class Product extends React.Component {
 
@@ -12,14 +13,14 @@ class Product extends React.Component {
     }
     
     componentDidMount(){
+        this.getProductById(this.props.match.params.id);
         const { product } = this.props.location.state;
         this.setState({product: product});
     }
 
-    loadProduct = async () => {
-        /*const response = await api.get('/products/admin/');
-        console.log(response.data);
-        this.setState({product: response.data});*/
+    getProductById = async (productId) => {
+        const response = await api.get('/products/admin/' + productId);
+        this.setState({ product: response.data });
     }
 
     render() {
@@ -34,12 +35,3 @@ class Product extends React.Component {
     }
 }
 export default (Product);
-/*export default ({product}) => (
-
-    <div>
-        <Typography variant="display1">{product.title}</Typography>
-        <Typography variant="display1">{product.slug}</Typography>
-        <Typography variant="display1">{product.price}</Typography>
-        <Typography variant="display1">{product.description}</Typography>
-    </div>
-);*/
