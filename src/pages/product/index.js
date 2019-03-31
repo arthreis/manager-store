@@ -14,8 +14,6 @@ class Product extends React.Component {
     
     componentDidMount(){
         this.getProductById(this.props.match.params.id);
-        const { product } = this.props.location.state;
-        this.setState({product: product});
     }
 
     getProductById = async (productId) => {
@@ -26,10 +24,10 @@ class Product extends React.Component {
     render() {
         return (
             <div>
-                <Typography variant="display1">{this.state.product.title}</Typography>
-                <Typography variant="display1">{this.state.product.slug}</Typography>
-                <Typography variant="display1">{this.state.product.price}</Typography>
-                <Typography variant="display1">{this.state.product.description}</Typography>
+                <Typography variant="h6">{this.state.product.title}</Typography>
+                <Typography variant="h6">{this.state.product.slug}</Typography>
+                <Typography variant="h6">{this.state.product.price}</Typography>
+                <Typography variant="h6">{this.state.product.description}</Typography>
             </div>
         );
     }

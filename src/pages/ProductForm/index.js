@@ -89,6 +89,7 @@ class ProductForm extends React.Component {
             
             if(!error.response){
                 console.error(error);
+                this.handleShowPopover(error.message);
                 return;
             }
 
@@ -146,8 +147,8 @@ class ProductForm extends React.Component {
         const { classes } = this.props;
         
     return (
-        <div>
-            <PopUp {...this.state.popUp}></PopUp>
+        <div>            
+            <PopUp popup={this.state.popUp}></PopUp>
         
             <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
                 <Grid container>

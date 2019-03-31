@@ -22,19 +22,14 @@ const styles = {
 
 const ProductCard = ({ product }) => (
     <Card style={styles.card}>
-        <CardActionArea component={Link} to={
-            {
-                pathname: `/product/${product._id}`,
-                state: { product: product }
-            }
-            } params={product._id}>
+        <CardActionArea component={Link} to={{ pathname: `/product/${product._id}`, state: { produto: product} }} params={product._id}>        
             <CardMedia
                 style={styles.media}
                 image={"assets/images/store-main.jpg"}
                 title={product.title}
             />
             <CardContent>
-                <Typography gutterBottom variant="p" component="p">
+                <Typography gutterBottom variant="h4" component="h4">
                     { product.title }
                 </Typography>
                 <Typography component="p">

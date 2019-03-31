@@ -8,17 +8,24 @@ class PopUp extends Component {
     
     constructor(props){
         super(props);
-        console.log(props);
+
+        this.handleClosePopover = this.handleClosePopover.bind(this);
 
         this.state = {
-            popup: {opened: false, message: null},
+            popup: {opened: props.popup.opened, message: props.popup.message},
         }
 
     }
-
+    
+    static getDerivedStateFromProps(nextProps, state) {
+        if(nextProps.popup.opened !== state.popup.opened){
+            return {popup: {opened: nextProps.popup.opened, message: nextProps.popup.message}};
+        }
+        return null;
+    }
+    
     handleClosePopover = () => {
-        console.log("handleClosePopover");        
-        //popup = {opened: false, message: null};
+        this.setState({popup: {opened: false, message: null}});
     }
 
     styles = theme => ({
@@ -49,6 +56,7 @@ class PopUp extends Component {
                 }}
             >
                 
+                <Typography className={styles.typography}>{this.state.popup.message}</Typography>
 
             </Popover>
         );
