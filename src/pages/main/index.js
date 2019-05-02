@@ -1,54 +1,26 @@
 import React, { Component } from 'react';
-import api from '../../services/api';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import { Link } from "react-router-dom";
 
-export default class Main extends Component {
+import styles from './styles';
 
-    state = {
-        products: [],
-        productInfo:{}
-    }
+class Main extends Component {
 
     //executado assim que o componente é exibido em tela
     componentDidMount(){
-        this.loadProducts();
-    }
-
-    //arrow function nao sobreescreve o valor do this
-    loadProducts = async () => {        
-        const response = await api.get('/products');
-        console.log(response.data);
-        this.setState({products: response.data})
-    }
-
-    prevPage = () => {
-
-    }
-    nextPage = () => {
-
+        console.log("Main page");
     }
 
     render(){
         return (
-            <div>
-                <h2>Products length: {this.state.products.length}</h2>
-                <div className="product-list">
-                    {this.state.products.map(product => (
-                        
-                        <article key={product._id}>                        
-                            <strong>{product.title}</strong> - <span>R$ {product.price}</span>
-                            <p>{product.slug}</p>
-                            <Link to="/product">Open</Link>
-                        </article>    
-
-                    ))}
-
-                    <div className="actions">
-                        <button onClick={this.prevPage}>Back</button>
-                        <button onClick={this.nextPage}>Next</button>
-                    </div>
-                </div>
+            <div style={ styles.background }>
+                <Fab size="large" color="secondary" aria-label="Add" style={ styles.addButton } component={Link} to="/product/new">
+                    <AddIcon />
+                </Fab>
             </div>
         );
     }
 } 
+
+export default Main;
