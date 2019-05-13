@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { TextField, withStyles, Switch, FormControlLabel, Grid, Button, Popover, Typography } from '@material-ui/core';
+import { TextField, withStyles, Switch, FormControlLabel, Grid, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Add';
+import NumberFormat from 'react-number-format';
+import PopUp from './../../components/PopUp';
 
 import api from '../../services/api';
 
@@ -10,17 +12,13 @@ const styles = theme => ({
     container: {
         display: 'flex',
         flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
-    dense: {
-        marginTop: 16,
-    },
+    },    
     menu: {
-        width: 200,
+        width: 0,
     },
+    typography: {
+        margin: theme.spacing.unit * 2,
+    }
 });
 
 class ProductForm extends React.Component {
@@ -32,9 +30,9 @@ class ProductForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         
         this.state = {
-            tokenid: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNDgxNGM3MmU4YTRiMjkyNDk4Nzk1OSIsImVtYWlsIjoiYXJyOTByakBnbWFpbC5jb20iLCJuYW1lIjoiQXJ0aHVyIFJlaXMiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXSwiaWF0IjoxNTQ0NTM4NDc4LCJleHAiOjE1NDQ2MjQ4Nzh9.MIKioyTRKUaqoJzvAzlzitF671OfWV4ApLMHKWgys4U",
+            tokenid: "",
             newProduct: {
-                name : "",
+                title : "",
                 slug : "",
                 description : "",
                 price : "",
@@ -49,9 +47,13 @@ class ProductForm extends React.Component {
         
     }
 
+    componentDidMount(){
+        const token = localStorage.getItem("mstore-tokenid");
+        this.setState( { tokenid: token } );
+    }
+
     handleChange = event => {
         let value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.setState({popUp: {opened: true, message: "error.response.data[0].message"}});
         this.setState({
             newProduct:{
                 ...this.state.newProduct,
@@ -60,7 +62,13 @@ class ProductForm extends React.Component {
         });
     };
 
-    handleSubmit(e){
+    handleChange2 = name => event => {
+        this.setState({
+          [name]: event.target.value,
+        });
+      };
+
+    handleSubmit = e => {
         console.log("Form submited!");
         e.preventDefault();
 
@@ -75,61 +83,82 @@ class ProductForm extends React.Component {
 
         this.saveProduct().then(function(res){
             console.log(res);
+            this.resetForm();
+            this.handleShowPopover(res.data.message);
         }).catch((error) => {
-            console.warn(error.response.status + " : " + error.response.data[0].message);            
-            this.setState({popUp: {opened: true, message: error.response.data[0].message}});
+            
+            if(!error.response){
+                console.error(error);
+                this.handleShowPopover(error.message);
+                return;
+            }
+
+            switch (error.response.status) {
+                case 401:
+                    console.warn(error.response.data.message);
+                    break;
+                case 400:
+                    console.warn(error.response.data.message);
+                    break;
+                default:
+                    console.warn(error.response.data.message);
+                    break;
+            }
+            let message = "";
+            if(error.response.data.length > 1){
+                error.response.data.forEach(msg => {
+                    message+=msg.message+"\n";
+                });
+            }else{
+                message = error.response.data.message;
+            }
+            this.handleShowPopover(message);
         });
     }
 
-    handleClose = () => {
+    /*handleClosePopover = () => {
+        this.setState({popUp: {opened: false, message: null}});
+    };*/
+
+    handleShowPopover = (message) => {
+        this.setState({popUp: {opened: true, message: message}});
     };
-    
-    handleRequestClose = () => {
-        this.setState({popUp: {opened: false, message: "error.response.data[0].message"}});
-      };
 
     saveProduct = async () => {
-        console.log("saving product...");
-        console.log(this.state.newProduct);
+        console.log("saving product...");        
         let axiosConfig = { headers: { 'Content-Type': 'application/json;charset=UTF-8', "x-access-token": this.state.tokenid, } };
-        const response = await api.post('/products', this.state.newProduct, axiosConfig);
+        const response = await api.post('/product', this.state.newProduct, axiosConfig);
         return response;
+    }
+
+    resetForm = () => {
+        this.setState({
+            newProduct: {
+                title : "",
+                slug : "",
+                description : "",
+                price : "",
+                active : true,
+                tags : []
+        }})
     }
 
     render() {
         const { classes } = this.props;
         
-        const { opened } = this.state.popUp;
-        const open = Boolean(opened);
-
     return (
-        <div>
-            <Popover
-                id="simple-popper"
-                open={open}
-                anchorEl={this.state.anchorEl}   
-                onClose={this.handleRequestClose}       
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Typography className={classes.typography}>{this.state.popUp.message}</Typography>
-            </Popover>
+        <div>            
+            <PopUp popup={this.state.popUp}></PopUp>
         
             <form className={classes.container} noValidate autoComplete="off" onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                <Grid container spacing={24}>
+                <Grid container>
                     <Grid item xs={12}>
                         <TextField
-                            name="name"
-                            value={this.state.newProduct.name}
+                            name="title"
+                            value={this.state.newProduct.title}
                             required  
                             id="outlined-required"
-                            label="Name"
+                            label="Title"
                             className={classes.textField}
                             margin="normal"
                             variant="outlined"
@@ -152,35 +181,41 @@ class ProductForm extends React.Component {
                             />
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={5}>
                         <TextField
                             name="slug"
                             value={this.state.newProduct.slug}
                             id="outlined-dense"
                             label="Slug"
-                            className={classNames(classes.textField, classes.dense)}
+                            className={classNames(classes.textField)}
                             margin="normal"
                             variant="outlined"
+                            fullWidth
                             />
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={2}>
+                    </Grid>
+
+                    <Grid item xs={5}>
+
                         <TextField
                             name="price"
                             value={this.state.newProduct.price}
-                            id="outlined-number"
+                            id="formatted-numberformat-input"
                             label="Price"
-                            type="number"
-                            className={classNames(classes.textField, classes.dense)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
+                            className={classNames(classes.textField)}
                             margin="normal"
                             variant="outlined"
-                            />
+                            InputProps={{
+                                inputComponent: NumberFormatCustom,
+                            }}
+                            fullWidth
+                        />
+                        
                     </Grid>
 
-                    <Grid item xs={4}>
+                    <Grid item xs={12}>
                         <TextField
                             name="tags"
                             value={this.state.newProduct.tags}
@@ -190,6 +225,7 @@ class ProductForm extends React.Component {
                             className={classes.textField}
                             margin="normal"
                             variant="outlined"
+                            fullWidth
                         />
                     </Grid>
 
@@ -201,7 +237,7 @@ class ProductForm extends React.Component {
                         />
                     </Grid>
 
-                    <Grid container direction="column" justify="flex-end" alignItems="flex-end" style={{ padding: 20 }}>
+                    <Grid container direction="column" justify="flex-end" alignItems="flex-end" >
                         
                         <Button type="submit" variant="contained" color="secondary" size="large" className={classes.button}>
                             <SaveIcon className={classNames(classes.leftIcon, classes.iconSmall)} />
@@ -218,6 +254,32 @@ class ProductForm extends React.Component {
 
 ProductForm.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+
+function NumberFormatCustom(props) {
+    const { inputRef, onChange, ...other } = props;
+
+    return (
+        <NumberFormat
+        {...other}
+        getInputRef={inputRef}
+        onValueChange={values => {
+            onChange({
+            target: {
+                value: values.value,
+            },
+            });
+        }}
+        prefix={"R$"}
+        allowNegative={false}
+        decimalScale={2}
+        />
+    );
+}
+  
+NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ProductForm);
