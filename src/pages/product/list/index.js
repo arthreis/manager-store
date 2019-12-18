@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import api from '../../services/api';
-import ProductCard from './../../components/ProductCard';
+import api from '../../../services/api';
+import ProductCard from './../../../components/ProductCard';
 
 export default class ProductList extends Component {
 
@@ -31,7 +31,7 @@ export default class ProductList extends Component {
     render(){
         return (
             <div>                
-                <div className="product-list">
+                <div className="product-list" style={styles.container}>
                     {this.state.products.map(product => (
                         <ProductCard product={product} key={product._id}/>
                     ))}
@@ -45,3 +45,10 @@ export default class ProductList extends Component {
         );
     }
 } 
+
+const styles = {
+    container:{
+        justifyContent: 'center',
+        display: 'grid',
+    }
+};

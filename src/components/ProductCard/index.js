@@ -18,6 +18,12 @@ const styles = {
   media: {
       height: 140,
   },
+  marginLeft: {
+      marginLeft: 'auto',
+  },
+  marginRight: {
+      marginRight: 'auto',
+  },
 };
 
 const ProductCard = ({ product }) => (
@@ -29,20 +35,20 @@ const ProductCard = ({ product }) => (
                 title={product.title}
             />
             <CardContent>
-                <Typography gutterBottom variant="h4" component="h4">
+                <Typography gutterBottom variant="h5" component="h5">
                     { product.title }
                 </Typography>
                 <Typography component="p">
-                    { product.slug }
+                    { product.slug } { product.price }
                 </Typography>
             </CardContent>
         </CardActionArea>
         <CardActions>
-            <Button size="small" color="primary">
-                Share
+            <Button size="small" color="primary" variant="contained" style={styles.marginRight} component={Link} to={ {pathname: `/product/edit/${product._id}`, state: {produto: product}}} params={product._id} >
+                Edit
             </Button>
-            <Button size="small" color="primary">
-                { product.price }
+            <Button size="small" color="secondary" variant="contained" style={styles.marginLeft}>
+                Delete
             </Button>
         </CardActions>
     </Card>

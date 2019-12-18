@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 class Product extends React.Component {
 

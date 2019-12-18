@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import { TextField, withStyles, Switch, FormControlLabel, Grid, Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Add';
 import NumberFormat from 'react-number-format';
-import PopUp from './../../components/PopUp';
+import PopUp from './../../../components/PopUp';
 
-import api from '../../services/api';
+import api from '../../../services/api';
 
 const styles = theme => ({
     container: {
@@ -50,6 +50,14 @@ class ProductForm extends React.Component {
     componentDidMount(){
         const token = localStorage.getItem("mstore-tokenid");
         this.setState( { tokenid: token } );
+        if(this.props.match.params.id){
+            this.getProductById(this.props.match.params.id);
+        }
+    }
+
+    getProductById = async (productId) => {
+        const response = await api.get('/products/admin/' + productId);
+        this.setState({ newProduct: response.data });
     }
 
     handleChange = event => {
